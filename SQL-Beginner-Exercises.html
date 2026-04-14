@@ -1,0 +1,917 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SQL 初級課題集</title>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Noto+Sans+JP:wght@400;700;900&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0d1117;
+    --surface: #161b22;
+    --surface2: #21262d;
+    --border: #30363d;
+    --accent: #58a6ff;
+    --accent2: #3fb950;
+    --accent3: #f78166;
+    --accent4: #d2a8ff;
+    --text: #e6edf3;
+    --text-muted: #8b949e;
+    --yellow: #e3b341;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Noto Sans JP', sans-serif;
+    min-height: 100vh;
+    padding: 0 0 80px;
+  }
+
+  /* Header */
+  header {
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    padding: 24px 40px;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+
+  header .tag {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    background: var(--accent2);
+    color: #0d1117;
+    padding: 3px 10px;
+    border-radius: 20px;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+  }
+
+  header h1 {
+    font-size: 20px;
+    font-weight: 900;
+    color: var(--text);
+  }
+
+  header .progress-wrap {
+    margin-left: auto;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-size: 13px;
+    color: var(--text-muted);
+  }
+
+  .progress-bar {
+    width: 120px;
+    height: 6px;
+    background: var(--border);
+    border-radius: 3px;
+    overflow: hidden;
+  }
+
+  .progress-fill {
+    height: 100%;
+    background: var(--accent2);
+    border-radius: 3px;
+    transition: width 0.4s ease;
+    width: 0%;
+  }
+
+  /* Hero */
+  .hero {
+    padding: 48px 40px 32px;
+    max-width: 900px;
+    margin: 0 auto;
+  }
+
+  .hero h2 {
+    font-size: 13px;
+    font-family: 'JetBrains Mono', monospace;
+    color: var(--accent);
+    margin-bottom: 12px;
+    letter-spacing: 0.1em;
+  }
+
+  .hero p {
+    color: var(--text-muted);
+    line-height: 1.8;
+    font-size: 14px;
+  }
+
+  /* Schema section */
+  .schema-section {
+    max-width: 900px;
+    margin: 0 auto 40px;
+    padding: 0 40px;
+  }
+
+  .section-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: var(--text-muted);
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    margin-bottom: 16px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .tables-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 16px;
+  }
+
+  .table-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    overflow: hidden;
+  }
+
+  .table-card-header {
+    background: var(--surface2);
+    padding: 10px 14px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--accent4);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .table-card-header::before {
+    content: '▸';
+    color: var(--text-muted);
+    font-size: 10px;
+  }
+
+  .table-card ul {
+    list-style: none;
+    padding: 10px 14px;
+  }
+
+  .table-card ul li {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    color: var(--text-muted);
+    padding: 3px 0;
+    display: flex;
+    justify-content: space-between;
+  }
+
+  .table-card ul li span.type {
+    color: var(--accent3);
+    font-size: 11px;
+  }
+
+  .table-card ul li.pk {
+    color: var(--yellow);
+  }
+
+  /* Exercises */
+  .exercises {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 0 40px;
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+  }
+
+  .exercise {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    overflow: hidden;
+    transition: border-color 0.2s;
+  }
+
+  .exercise.solved {
+    border-color: var(--accent2);
+  }
+
+  .exercise-header {
+    padding: 18px 24px;
+    display: flex;
+    align-items: flex-start;
+    gap: 16px;
+    cursor: pointer;
+    user-select: none;
+  }
+
+  .ex-number {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--bg);
+    background: var(--accent);
+    width: 28px;
+    height: 28px;
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+
+  .exercise.solved .ex-number {
+    background: var(--accent2);
+  }
+
+  .ex-meta { flex: 1; }
+
+  .ex-title {
+    font-size: 15px;
+    font-weight: 700;
+    margin-bottom: 6px;
+    line-height: 1.4;
+  }
+
+  .ex-desc {
+    font-size: 13px;
+    color: var(--text-muted);
+    line-height: 1.6;
+  }
+
+  .ex-tags {
+    display: flex;
+    gap: 6px;
+    margin-top: 8px;
+    flex-wrap: wrap;
+  }
+
+  .ex-tag {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    padding: 2px 8px;
+    border-radius: 4px;
+    border: 1px solid;
+  }
+
+  .ex-tag.select { color: var(--accent); border-color: var(--accent); }
+  .ex-tag.where  { color: var(--yellow); border-color: var(--yellow); }
+  .ex-tag.join   { color: var(--accent4); border-color: var(--accent4); }
+  .ex-tag.order  { color: var(--accent2); border-color: var(--accent2); }
+  .ex-tag.limit  { color: var(--accent3); border-color: var(--accent3); }
+
+  .ex-chevron {
+    color: var(--text-muted);
+    font-size: 12px;
+    margin-top: 6px;
+    transition: transform 0.2s;
+  }
+
+  .exercise.open .ex-chevron { transform: rotate(90deg); }
+
+  .exercise-body {
+    display: none;
+    border-top: 1px solid var(--border);
+  }
+
+  .exercise.open .exercise-body { display: block; }
+
+  /* Expected output */
+  .expected {
+    padding: 16px 24px;
+    background: var(--surface2);
+    border-bottom: 1px solid var(--border);
+  }
+
+  .expected-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    color: var(--text-muted);
+    letter-spacing: 0.1em;
+    margin-bottom: 10px;
+  }
+
+  .expected-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+  }
+
+  .expected-table th {
+    background: var(--border);
+    color: var(--accent);
+    padding: 6px 12px;
+    text-align: left;
+    font-weight: 700;
+  }
+
+  .expected-table td {
+    padding: 5px 12px;
+    border-bottom: 1px solid var(--border);
+    color: var(--text-muted);
+  }
+
+  .expected-table tr:last-child td { border-bottom: none; }
+
+  /* Answer area */
+  .answer-area {
+    padding: 16px 24px;
+  }
+
+  .answer-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    color: var(--text-muted);
+    letter-spacing: 0.1em;
+    margin-bottom: 10px;
+  }
+
+  textarea {
+    width: 100%;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    color: var(--text);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 13px;
+    padding: 12px 16px;
+    resize: vertical;
+    min-height: 80px;
+    outline: none;
+    line-height: 1.6;
+    transition: border-color 0.2s;
+  }
+
+  textarea:focus { border-color: var(--accent); }
+
+  .btn-row {
+    display: flex;
+    gap: 10px;
+    margin-top: 12px;
+  }
+
+  .btn {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    font-weight: 700;
+    padding: 8px 18px;
+    border-radius: 6px;
+    border: none;
+    cursor: pointer;
+    transition: opacity 0.15s, transform 0.1s;
+  }
+
+  .btn:active { transform: scale(0.97); }
+
+  .btn-check {
+    background: var(--accent);
+    color: var(--bg);
+  }
+
+  .btn-hint {
+    background: transparent;
+    color: var(--text-muted);
+    border: 1px solid var(--border);
+  }
+
+  .btn-reset {
+    background: transparent;
+    color: var(--accent3);
+    border: 1px solid var(--accent3);
+  }
+
+  .feedback {
+    margin-top: 12px;
+    font-size: 13px;
+    padding: 10px 14px;
+    border-radius: 6px;
+    display: none;
+    font-family: 'JetBrains Mono', monospace;
+  }
+
+  .feedback.correct {
+    background: rgba(63, 185, 80, 0.12);
+    border: 1px solid var(--accent2);
+    color: var(--accent2);
+    display: block;
+  }
+
+  .feedback.incorrect {
+    background: rgba(247, 129, 102, 0.12);
+    border: 1px solid var(--accent3);
+    color: var(--accent3);
+    display: block;
+  }
+
+  .hint-box {
+    margin-top: 12px;
+    background: rgba(88, 166, 255, 0.08);
+    border: 1px solid rgba(88, 166, 255, 0.3);
+    border-radius: 6px;
+    padding: 10px 14px;
+    font-size: 13px;
+    color: var(--accent);
+    display: none;
+    line-height: 1.6;
+  }
+
+  .hint-box.show { display: block; }
+
+  /* Answer reveal */
+  .answer-reveal {
+    margin-top: 10px;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 12px 16px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    color: var(--accent4);
+    display: none;
+    white-space: pre-wrap;
+  }
+
+  .answer-reveal.show { display: block; }
+
+  /* Responsive */
+  @media (max-width: 600px) {
+    header { padding: 16px 20px; }
+    .hero, .schema-section, .exercises { padding-left: 20px; padding-right: 20px; }
+    header h1 { font-size: 16px; }
+    header .progress-wrap { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <span class="tag">初級</span>
+  <h1>SQL 課題集 — SELECT / WHERE / JOIN</h1>
+  <div class="progress-wrap">
+    <span id="progress-text">0 / 8 完了</span>
+    <div class="progress-bar"><div class="progress-fill" id="progress-fill"></div></div>
+  </div>
+</header>
+
+<div class="hero">
+  <h2>// SCENARIO</h2>
+  <p>架空のECサイト「ShopDB」のデータを使って、SQLの基礎を練習します。<br>
+  以下のテーブル構造を確認して、各問題に答えてください。<br>
+  ※ 実際のDB環境がなくても、SQLを書いて答え合わせができます。</p>
+</div>
+
+<div class="schema-section">
+  <div class="section-label">// テーブル定義</div>
+  <div class="tables-grid">
+
+    <div class="table-card">
+      <div class="table-card-header">customers</div>
+      <ul>
+        <li class="pk"><span>customer_id</span><span class="type">INT PK</span></li>
+        <li><span>name</span><span class="type">VARCHAR</span></li>
+        <li><span>email</span><span class="type">VARCHAR</span></li>
+        <li><span>city</span><span class="type">VARCHAR</span></li>
+        <li><span>age</span><span class="type">INT</span></li>
+      </ul>
+    </div>
+
+    <div class="table-card">
+      <div class="table-card-header">products</div>
+      <ul>
+        <li class="pk"><span>product_id</span><span class="type">INT PK</span></li>
+        <li><span>name</span><span class="type">VARCHAR</span></li>
+        <li><span>category</span><span class="type">VARCHAR</span></li>
+        <li><span>price</span><span class="type">DECIMAL</span></li>
+        <li><span>stock</span><span class="type">INT</span></li>
+      </ul>
+    </div>
+
+    <div class="table-card">
+      <div class="table-card-header">orders</div>
+      <ul>
+        <li class="pk"><span>order_id</span><span class="type">INT PK</span></li>
+        <li><span>customer_id</span><span class="type">INT FK</span></li>
+        <li><span>product_id</span><span class="type">INT FK</span></li>
+        <li><span>quantity</span><span class="type">INT</span></li>
+        <li><span>order_date</span><span class="type">DATE</span></li>
+        <li><span>status</span><span class="type">VARCHAR</span></li>
+      </ul>
+    </div>
+
+  </div>
+</div>
+
+<div class="exercises" id="exercises">
+
+  <!-- Q1 -->
+  <div class="exercise" id="ex-1">
+    <div class="exercise-header" onclick="toggleEx(1)">
+      <div class="ex-number">1</div>
+      <div class="ex-meta">
+        <div class="ex-title">全顧客を取得する</div>
+        <div class="ex-desc">customersテーブルの全ての列・全ての行を取得してください。</div>
+        <div class="ex-tags">
+          <span class="ex-tag select">SELECT</span>
+        </div>
+      </div>
+      <div class="ex-chevron">▶</div>
+    </div>
+    <div class="exercise-body">
+      <div class="expected">
+        <div class="expected-label">// 期待される出力（例）</div>
+        <table class="expected-table">
+          <tr><th>customer_id</th><th>name</th><th>email</th><th>city</th><th>age</th></tr>
+          <tr><td>1</td><td>田中太郎</td><td>tanaka@...</td><td>東京</td><td>32</td></tr>
+          <tr><td>2</td><td>鈴木花子</td><td>suzuki@...</td><td>大阪</td><td>25</td></tr>
+          <tr><td colspan="5" style="color:var(--text-muted);font-style:italic;">... 全行</td></tr>
+        </table>
+      </div>
+      <div class="answer-area">
+        <div class="answer-label">// あなたの答え</div>
+        <textarea id="ans-1" placeholder="SELECT ..."></textarea>
+        <div class="btn-row">
+          <button class="btn btn-check" onclick="check(1)">答え合わせ</button>
+          <button class="btn btn-hint" onclick="toggleHint(1)">ヒント</button>
+          <button class="btn btn-reset" onclick="reset(1)">リセット</button>
+        </div>
+        <div class="hint-box" id="hint-1">* はすべての列を表します。テーブル名の前に FROM を使います。</div>
+        <div class="feedback" id="fb-1"></div>
+        <div class="answer-reveal" id="ar-1">SELECT * FROM customers;</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Q2 -->
+  <div class="exercise" id="ex-2">
+    <div class="exercise-header" onclick="toggleEx(2)">
+      <div class="ex-number">2</div>
+      <div class="ex-meta">
+        <div class="ex-title">商品名と価格だけ取得する</div>
+        <div class="ex-desc">productsテーブルから、nameとpriceの列だけを取得してください。</div>
+        <div class="ex-tags">
+          <span class="ex-tag select">SELECT</span>
+        </div>
+      </div>
+      <div class="ex-chevron">▶</div>
+    </div>
+    <div class="exercise-body">
+      <div class="expected">
+        <div class="expected-label">// 期待される出力（例）</div>
+        <table class="expected-table">
+          <tr><th>name</th><th>price</th></tr>
+          <tr><td>ワイヤレスイヤホン</td><td>8900</td></tr>
+          <tr><td>スマートウォッチ</td><td>32000</td></tr>
+          <tr><td colspan="2" style="color:var(--text-muted);font-style:italic;">...</td></tr>
+        </table>
+      </div>
+      <div class="answer-area">
+        <div class="answer-label">// あなたの答え</div>
+        <textarea id="ans-2" placeholder="SELECT ..."></textarea>
+        <div class="btn-row">
+          <button class="btn btn-check" onclick="check(2)">答え合わせ</button>
+          <button class="btn btn-hint" onclick="toggleHint(2)">ヒント</button>
+          <button class="btn btn-reset" onclick="reset(2)">リセット</button>
+        </div>
+        <div class="hint-box" id="hint-2">SELECT のあとに取得したい列名をカンマで区切って書きます。</div>
+        <div class="feedback" id="fb-2"></div>
+        <div class="answer-reveal" id="ar-2">SELECT name, price FROM products;</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Q3 -->
+  <div class="exercise" id="ex-3">
+    <div class="exercise-header" onclick="toggleEx(3)">
+      <div class="ex-number">3</div>
+      <div class="ex-meta">
+        <div class="ex-title">東京の顧客だけ取得する</div>
+        <div class="ex-desc">customersテーブルから、city が '東京' の顧客を全列取得してください。</div>
+        <div class="ex-tags">
+          <span class="ex-tag select">SELECT</span>
+          <span class="ex-tag where">WHERE</span>
+        </div>
+      </div>
+      <div class="ex-chevron">▶</div>
+    </div>
+    <div class="exercise-body">
+      <div class="expected">
+        <div class="expected-label">// 期待される出力（例）</div>
+        <table class="expected-table">
+          <tr><th>customer_id</th><th>name</th><th>city</th></tr>
+          <tr><td>1</td><td>田中太郎</td><td>東京</td></tr>
+          <tr><td>5</td><td>山田二郎</td><td>東京</td></tr>
+        </table>
+      </div>
+      <div class="answer-area">
+        <div class="answer-label">// あなたの答え</div>
+        <textarea id="ans-3" placeholder="SELECT ..."></textarea>
+        <div class="btn-row">
+          <button class="btn btn-check" onclick="check(3)">答え合わせ</button>
+          <button class="btn btn-hint" onclick="toggleHint(3)">ヒント</button>
+          <button class="btn btn-reset" onclick="reset(3)">リセット</button>
+        </div>
+        <div class="hint-box" id="hint-3">WHERE 列名 = '値' で条件を指定します。文字列はシングルクォートで囲みます。</div>
+        <div class="feedback" id="fb-3"></div>
+        <div class="answer-reveal" id="ar-3">SELECT * FROM customers WHERE city = '東京';</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Q4 -->
+  <div class="exercise" id="ex-4">
+    <div class="exercise-header" onclick="toggleEx(4)">
+      <div class="ex-number">4</div>
+      <div class="ex-meta">
+        <div class="ex-title">価格が10,000円以上の商品を取得する</div>
+        <div class="ex-desc">productsテーブルから price が 10000 以上の商品を全列取得してください。</div>
+        <div class="ex-tags">
+          <span class="ex-tag select">SELECT</span>
+          <span class="ex-tag where">WHERE</span>
+        </div>
+      </div>
+      <div class="ex-chevron">▶</div>
+    </div>
+    <div class="exercise-body">
+      <div class="expected">
+        <div class="expected-label">// 期待される出力（例）</div>
+        <table class="expected-table">
+          <tr><th>product_id</th><th>name</th><th>price</th></tr>
+          <tr><td>2</td><td>スマートウォッチ</td><td>32000</td></tr>
+          <tr><td>4</td><td>タブレット</td><td>58000</td></tr>
+        </table>
+      </div>
+      <div class="answer-area">
+        <div class="answer-label">// あなたの答え</div>
+        <textarea id="ans-4" placeholder="SELECT ..."></textarea>
+        <div class="btn-row">
+          <button class="btn btn-check" onclick="check(4)">答え合わせ</button>
+          <button class="btn btn-hint" onclick="toggleHint(4)">ヒント</button>
+          <button class="btn btn-reset" onclick="reset(4)">リセット</button>
+        </div>
+        <div class="hint-box" id="hint-4">数値の比較には &gt;= （以上）を使います。</div>
+        <div class="feedback" id="fb-4"></div>
+        <div class="answer-reveal" id="ar-4">SELECT * FROM products WHERE price >= 10000;</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Q5 -->
+  <div class="exercise" id="ex-5">
+    <div class="exercise-header" onclick="toggleEx(5)">
+      <div class="ex-number">5</div>
+      <div class="ex-meta">
+        <div class="ex-title">ステータスが「shipped」の注文を取得する</div>
+        <div class="ex-desc">ordersテーブルから status が 'shipped' の注文を全列取得してください。</div>
+        <div class="ex-tags">
+          <span class="ex-tag select">SELECT</span>
+          <span class="ex-tag where">WHERE</span>
+        </div>
+      </div>
+      <div class="ex-chevron">▶</div>
+    </div>
+    <div class="exercise-body">
+      <div class="expected">
+        <div class="expected-label">// 期待される出力（例）</div>
+        <table class="expected-table">
+          <tr><th>order_id</th><th>customer_id</th><th>status</th></tr>
+          <tr><td>3</td><td>2</td><td>shipped</td></tr>
+          <tr><td>7</td><td>5</td><td>shipped</td></tr>
+        </table>
+      </div>
+      <div class="answer-area">
+        <div class="answer-label">// あなたの答え</div>
+        <textarea id="ans-5" placeholder="SELECT ..."></textarea>
+        <div class="btn-row">
+          <button class="btn btn-check" onclick="check(5)">答え合わせ</button>
+          <button class="btn btn-hint" onclick="toggleHint(5)">ヒント</button>
+          <button class="btn btn-reset" onclick="reset(5)">リセット</button>
+        </div>
+        <div class="hint-box" id="hint-5">WHERE status = 'shipped' のように文字列条件を指定します。</div>
+        <div class="feedback" id="fb-5"></div>
+        <div class="answer-reveal" id="ar-5">SELECT * FROM orders WHERE status = 'shipped';</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Q6 -->
+  <div class="exercise" id="ex-6">
+    <div class="exercise-header" onclick="toggleEx(6)">
+      <div class="ex-number">6</div>
+      <div class="ex-meta">
+        <div class="ex-title">顧客名と注文IDを一緒に取得する（JOIN）</div>
+        <div class="ex-desc">customers と orders を結合して、顧客の name と order_id を取得してください。</div>
+        <div class="ex-tags">
+          <span class="ex-tag select">SELECT</span>
+          <span class="ex-tag join">JOIN</span>
+        </div>
+      </div>
+      <div class="ex-chevron">▶</div>
+    </div>
+    <div class="exercise-body">
+      <div class="expected">
+        <div class="expected-label">// 期待される出力（例）</div>
+        <table class="expected-table">
+          <tr><th>name</th><th>order_id</th></tr>
+          <tr><td>田中太郎</td><td>1</td></tr>
+          <tr><td>鈴木花子</td><td>3</td></tr>
+          <tr><td colspan="2" style="color:var(--text-muted);font-style:italic;">...</td></tr>
+        </table>
+      </div>
+      <div class="answer-area">
+        <div class="answer-label">// あなたの答え</div>
+        <textarea id="ans-6" placeholder="SELECT ..."></textarea>
+        <div class="btn-row">
+          <button class="btn btn-check" onclick="check(6)">答え合わせ</button>
+          <button class="btn btn-hint" onclick="toggleHint(6)">ヒント</button>
+          <button class="btn btn-reset" onclick="reset(6)">リセット</button>
+        </div>
+        <div class="hint-box" id="hint-6">JOIN テーブル名 ON 共通キー で結合します。customers.customer_id = orders.customer_id が共通キーです。</div>
+        <div class="feedback" id="fb-6"></div>
+        <div class="answer-reveal" id="ar-6">SELECT customers.name, orders.order_id
+FROM customers
+JOIN orders ON customers.customer_id = orders.customer_id;</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Q7 -->
+  <div class="exercise" id="ex-7">
+    <div class="exercise-header" onclick="toggleEx(7)">
+      <div class="ex-number">7</div>
+      <div class="ex-meta">
+        <div class="ex-title">顧客名・商品名・注文数を取得する（3テーブルJOIN）</div>
+        <div class="ex-desc">customers・orders・products を結合して、顧客名(name)・商品名(name)・数量(quantity)を取得してください。</div>
+        <div class="ex-tags">
+          <span class="ex-tag select">SELECT</span>
+          <span class="ex-tag join">JOIN</span>
+        </div>
+      </div>
+      <div class="ex-chevron">▶</div>
+    </div>
+    <div class="exercise-body">
+      <div class="expected">
+        <div class="expected-label">// 期待される出力（例）</div>
+        <table class="expected-table">
+          <tr><th>顧客名</th><th>商品名</th><th>quantity</th></tr>
+          <tr><td>田中太郎</td><td>ワイヤレスイヤホン</td><td>2</td></tr>
+          <tr><td>鈴木花子</td><td>スマートウォッチ</td><td>1</td></tr>
+        </table>
+      </div>
+      <div class="answer-area">
+        <div class="answer-label">// あなたの答え</div>
+        <textarea id="ans-7" placeholder="SELECT ..."></textarea>
+        <div class="btn-row">
+          <button class="btn btn-check" onclick="check(7)">答え合わせ</button>
+          <button class="btn btn-hint" onclick="toggleHint(7)">ヒント</button>
+          <button class="btn btn-reset" onclick="reset(7)">リセット</button>
+        </div>
+        <div class="hint-box" id="hint-7">同名の列(name)は テーブル名.name で区別します。JOIN を2回使います。orders → customers と orders → products をそれぞれ結合します。</div>
+        <div class="feedback" id="fb-7"></div>
+        <div class="answer-reveal" id="ar-7">SELECT customers.name, products.name, orders.quantity
+FROM orders
+JOIN customers ON orders.customer_id = customers.customer_id
+JOIN products ON orders.product_id = products.product_id;</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Q8 -->
+  <div class="exercise" id="ex-8">
+    <div class="exercise-header" onclick="toggleEx(8)">
+      <div class="ex-number">8</div>
+      <div class="ex-meta">
+        <div class="ex-title">大阪の顧客の注文を取得する（JOIN + WHERE）</div>
+        <div class="ex-desc">customers と orders を結合して、city が '大阪' の顧客の order_id と order_date を取得してください。</div>
+        <div class="ex-tags">
+          <span class="ex-tag select">SELECT</span>
+          <span class="ex-tag join">JOIN</span>
+          <span class="ex-tag where">WHERE</span>
+        </div>
+      </div>
+      <div class="ex-chevron">▶</div>
+    </div>
+    <div class="exercise-body">
+      <div class="expected">
+        <div class="expected-label">// 期待される出力（例）</div>
+        <table class="expected-table">
+          <tr><th>order_id</th><th>order_date</th></tr>
+          <tr><td>3</td><td>2024-03-15</td></tr>
+          <tr><td>9</td><td>2024-04-02</td></tr>
+        </table>
+      </div>
+      <div class="answer-area">
+        <div class="answer-label">// あなたの答え</div>
+        <textarea id="ans-8" placeholder="SELECT ..."></textarea>
+        <div class="btn-row">
+          <button class="btn btn-check" onclick="check(8)">答え合わせ</button>
+          <button class="btn btn-hint" onclick="toggleHint(8)">ヒント</button>
+          <button class="btn btn-reset" onclick="reset(8)">リセット</button>
+        </div>
+        <div class="hint-box" id="hint-8">JOIN の後に WHERE を追加して、city = '大阪' で絞り込みます。</div>
+        <div class="feedback" id="fb-8"></div>
+        <div class="answer-reveal" id="ar-8">SELECT orders.order_id, orders.order_date
+FROM orders
+JOIN customers ON orders.customer_id = customers.customer_id
+WHERE customers.city = '大阪';</div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+  const answers = {
+    1: ["select * from customers"],
+    2: ["select name, price from products", "select name,price from products"],
+    3: ["select * from customers where city = '東京'"],
+    4: ["select * from products where price >= 10000"],
+    5: ["select * from orders where status = 'shipped'"],
+    6: [
+      "select customers.name, orders.order_id from customers join orders on customers.customer_id = orders.customer_id",
+      "select customers.name, orders.order_id from orders join customers on customers.customer_id = orders.customer_id",
+      "select customers.name, orders.order_id from customers join orders on orders.customer_id = customers.customer_id"
+    ],
+    7: [
+      "select customers.name, products.name, orders.quantity from orders join customers on orders.customer_id = customers.customer_id join products on orders.product_id = products.product_id",
+      "select customers.name, products.name, orders.quantity from customers join orders on orders.customer_id = customers.customer_id join products on orders.product_id = products.product_id"
+    ],
+    8: [
+      "select orders.order_id, orders.order_date from orders join customers on orders.customer_id = customers.customer_id where customers.city = '大阪'",
+      "select orders.order_id, orders.order_date from customers join orders on orders.customer_id = customers.customer_id where customers.city = '大阪'"
+    ]
+  };
+
+  const solved = new Set();
+
+  function normalize(sql) {
+    return sql.toLowerCase()
+      .replace(/\s+/g, ' ')
+      .replace(/;\s*$/, '')
+      .trim();
+  }
+
+  function toggleEx(n) {
+    const el = document.getElementById('ex-' + n);
+    el.classList.toggle('open');
+  }
+
+  function check(n) {
+    const input = normalize(document.getElementById('ans-' + n).value);
+    const fb = document.getElementById('fb-' + n);
+    const ar = document.getElementById('ar-' + n);
+    const ex = document.getElementById('ex-' + n);
+
+    if (!input) {
+      fb.className = 'feedback incorrect';
+      fb.textContent = '⚠ SQLを入力してください。';
+      return;
+    }
+
+    const correct = answers[n].some(a => normalize(a) === input);
+
+    if (correct) {
+      fb.className = 'feedback correct';
+      fb.textContent = '✓ 正解です！';
+      ar.classList.add('show');
+      if (!solved.has(n)) {
+        solved.add(n);
+        ex.classList.add('solved');
+        updateProgress();
+      }
+    } else {
+      fb.className = 'feedback incorrect';
+      fb.textContent = '✗ もう一度確認してみましょう。ヒントを参考にしてください。';
+    }
+  }
+
+  function toggleHint(n) {
+    document.getElementById('hint-' + n).classList.toggle('show');
+  }
+
+  function reset(n) {
+    document.getElementById('ans-' + n).value = '';
+    document.getElementById('fb-' + n).className = 'feedback';
+    document.getElementById('hint-' + n).classList.remove('show');
+    document.getElementById('ar-' + n).classList.remove('show');
+    if (solved.has(n)) {
+      solved.delete(n);
+      document.getElementById('ex-' + n).classList.remove('solved');
+      updateProgress();
+    }
+  }
+
+  function updateProgress() {
+    const total = 8;
+    const done = solved.size;
+    document.getElementById('progress-text').textContent = done + ' / ' + total + ' 完了';
+    document.getElementById('progress-fill').style.width = (done / total * 100) + '%';
+  }
+</script>
+</body>
+</html>
