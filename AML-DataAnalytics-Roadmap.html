@@ -1,0 +1,611 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AML × Data Analytics 1年キャリアプラン</title>
+<link href="https://fonts.googleapis.com/css2?family=Zen+Kaku+Gothic+New:wght@400;500;700;900&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --bg:#F7F6F3;
+  --card:#FFFFFF;
+  --ink:#1a1a1a;
+  --ink2:#5a5a5a;
+  --ink3:#9a9a9a;
+  --accent:#0B5394;
+  --accent2:#1A73B5;
+  --accent-light:#E8F0FE;
+  --border:#E8E6E1;
+  --phase1:#0B5394;--phase1-bg:#DBEAFE;
+  --phase2:#0E7490;--phase2-bg:#CCFBF1;
+  --phase3:#7C3AED;--phase3-bg:#EDE9FE;
+  --phase4:#DC2626;--phase4-bg:#FEE2E2;
+  --gold:#D97706;--gold-bg:#FEF3C7;
+  --purple:#7C3AED;--purple-bg:#F3E8FF;
+  --check:#10B981;
+  --radius:14px;
+  --shadow:0 1px 3px rgba(0,0,0,.04), 0 4px 12px rgba(0,0,0,.03);
+  --shadow-lg:0 4px 20px rgba(0,0,0,.07);
+}
+body{
+  font-family:'Zen Kaku Gothic New','Hiragino Sans',sans-serif;
+  background:var(--bg);color:var(--ink);
+  line-height:1.7;-webkit-font-smoothing:antialiased;
+}
+.mono{font-family:'DM Mono',monospace}
+
+/* Layout */
+.app{max-width:680px;margin:0 auto;padding:16px 16px 80px}
+
+/* Header */
+.hero{padding:32px 0 24px;position:relative}
+.hero-eyebrow{
+  font-size:11px;font-weight:700;letter-spacing:3px;
+  color:var(--accent);text-transform:uppercase;margin-bottom:8px;
+}
+.hero h1{font-size:32px;font-weight:900;color:var(--ink);line-height:1.15;letter-spacing:-.5px}
+.hero h1 em{font-style:normal;color:var(--accent)}
+.hero-sub{font-size:14px;color:var(--ink2);margin-top:6px}
+
+/* Progress Ring */
+.progress-section{
+  display:flex;align-items:center;gap:16px;
+  background:var(--card);border:1px solid var(--border);
+  border-radius:var(--radius);padding:16px 20px;margin-bottom:24px;
+  box-shadow:var(--shadow);
+}
+.ring-wrap{position:relative;width:56px;height:56px;flex-shrink:0}
+.ring-wrap svg{transform:rotate(-90deg)}
+.ring-bg{fill:none;stroke:var(--border);stroke-width:5}
+.ring-fill{fill:none;stroke:var(--accent);stroke-width:5;stroke-linecap:round;transition:stroke-dashoffset .6s ease}
+.ring-text{
+  position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
+  font-size:14px;font-weight:900;color:var(--accent);
+}
+.progress-info{flex:1}
+.progress-label{font-size:13px;font-weight:700;color:var(--ink)}
+.progress-detail{font-size:12px;color:var(--ink3);margin-top:2px}
+
+/* Tabs */
+.tabs{
+  display:flex;gap:4px;margin-bottom:20px;
+  background:var(--card);border:1px solid var(--border);
+  border-radius:12px;padding:4px;box-shadow:var(--shadow);
+}
+.tab{
+  flex:1;padding:10px 8px;border:none;background:transparent;
+  cursor:pointer;font-size:12px;font-weight:700;color:var(--ink3);
+  border-radius:9px;transition:all .2s;
+  font-family:'Zen Kaku Gothic New',sans-serif;white-space:nowrap;
+}
+.tab.active{background:var(--accent);color:white;box-shadow:0 2px 8px rgba(11,83,148,.25)}
+.tab:not(.active):hover{background:rgba(0,0,0,.03)}
+
+.panel{display:none}
+.panel.active{display:block}
+
+/* Phase Grid */
+.phase-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:20px}
+.phase-card{
+  position:relative;padding:16px;border-radius:var(--radius);cursor:pointer;
+  border:2px solid transparent;transition:all .25s;overflow:hidden;
+}
+.phase-card::after{
+  content:'';position:absolute;top:0;right:0;width:60px;height:60px;
+  border-radius:0 0 0 60px;opacity:.12;
+}
+.phase-card:hover{transform:translateY(-2px);box-shadow:var(--shadow-lg)}
+.phase-card.sel{border-color:var(--ink);box-shadow:var(--shadow-lg)}
+.pc-icon{font-size:24px;margin-bottom:4px}
+.pc-months{font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;opacity:.7}
+.pc-title{font-size:16px;font-weight:900;margin-top:2px}
+.pc-sub{font-size:11px;opacity:.65;margin-top:1px}
+.pc-bar{height:5px;background:rgba(255,255,255,.5);border-radius:3px;overflow:hidden;margin-top:10px}
+.pc-fill{height:100%;border-radius:3px;transition:width .4s}
+.pc-pct{font-size:11px;font-weight:700;opacity:.7;margin-top:4px}
+
+/* Detail Card */
+.detail{
+  background:var(--card);border:1px solid var(--border);
+  border-radius:var(--radius);padding:24px;box-shadow:var(--shadow);
+}
+.detail-head{display:flex;align-items:center;gap:12px;margin-bottom:4px}
+.detail-icon{font-size:32px}
+.detail-meta .dm-months{font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase}
+.detail-meta h2{font-size:22px;font-weight:900;line-height:1.2}
+.detail-meta h2 span{font-weight:400;font-size:13px;color:var(--ink3);margin-left:6px}
+
+.goal{
+  font-size:13px;color:var(--ink2);margin:10px 0 20px;padding:12px 16px;
+  background:var(--accent-light);border-radius:10px;
+  border-left:4px solid var(--accent);
+}
+
+.cat-label{
+  font-size:13px;font-weight:900;color:var(--accent);
+  margin-top:20px;margin-bottom:6px;letter-spacing:.3px;
+}
+
+.task{
+  display:flex;align-items:flex-start;gap:10px;padding:10px 0;
+  border-bottom:1px solid var(--border);cursor:pointer;transition:background .1s;
+}
+.task:hover{background:rgba(0,0,0,.015);margin:0 -8px;padding-left:8px;padding-right:8px;border-radius:8px}
+.task:last-child{border-bottom:none}
+.cb{
+  width:22px;height:22px;min-width:22px;border-radius:7px;
+  border:2px solid var(--border);display:flex;align-items:center;justify-content:center;
+  font-size:12px;transition:all .2s;margin-top:2px;user-select:none;
+}
+.cb.on{background:var(--check);border-color:var(--check);color:white}
+.task-txt{font-size:14px;color:var(--ink);line-height:1.6}
+.task-txt.done{text-decoration:line-through;color:var(--ink3)}
+
+/* Info Boxes */
+.info-box{padding:14px 16px;border-radius:12px;margin-top:14px}
+.info-box .ib-label{font-size:11px;font-weight:900;letter-spacing:1px;text-transform:uppercase;margin-bottom:4px}
+.info-box .ib-text{font-size:13px;line-height:1.7}
+
+.box-routine{background:var(--gold-bg);border:1px solid #FBBF24}
+.box-routine .ib-label{color:var(--gold)}
+.box-routine .ib-text{color:#78350F}
+
+.box-weekend{background:var(--purple-bg);border:1px solid #C4B5FD}
+.box-weekend .ib-label{color:var(--purple)}
+.box-weekend .ib-text{color:#4C1D95}
+
+.box-milestone{
+  background:linear-gradient(135deg,var(--accent),var(--accent2));
+  color:white;margin-top:18px;
+}
+.box-milestone .ib-label{opacity:.7}
+
+/* Resources */
+.filters{display:flex;gap:6px;margin-bottom:16px;flex-wrap:wrap}
+.fbtn{
+  padding:7px 16px;border:1px solid var(--border);background:var(--card);
+  border-radius:20px;cursor:pointer;font-size:12px;font-weight:600;
+  font-family:'Zen Kaku Gothic New',sans-serif;transition:all .15s;
+}
+.fbtn.on{background:var(--accent);color:white;border-color:var(--accent)}
+.fbtn:not(.on):hover{border-color:var(--ink3)}
+
+.res-card{
+  padding:14px 16px;background:var(--card);border-radius:12px;
+  border:1px solid var(--border);margin-bottom:8px;box-shadow:var(--shadow);
+  transition:transform .15s;
+}
+.res-card:hover{transform:translateX(3px)}
+.res-head{display:flex;justify-content:space-between;align-items:center}
+.res-name{font-size:15px;font-weight:700;color:var(--accent)}
+.res-tag{
+  font-size:10px;font-weight:700;background:var(--accent-light);color:var(--accent);
+  padding:3px 10px;border-radius:10px;
+}
+.res-url{font-size:11px;color:var(--accent2);margin-top:3px;font-family:'DM Mono',monospace}
+.res-desc{font-size:13px;color:var(--ink2);margin-top:4px}
+
+.tip-box{
+  background:var(--accent-light);padding:18px;border-radius:var(--radius);
+  margin-top:20px;border:1px solid #B6D4FE;
+}
+.tip-box .tip-label{font-size:14px;font-weight:900;color:var(--accent);margin-bottom:8px}
+.tip-box .tip-text{font-size:13px;color:var(--ink2);line-height:1.8}
+
+/* Career */
+.career-wrap{
+  background:var(--card);border-radius:var(--radius);
+  border:1px solid var(--border);padding:8px 20px;box-shadow:var(--shadow);
+}
+.career-step{display:flex;gap:16px;padding:18px 0;border-bottom:1px solid var(--border);position:relative}
+.career-step:last-child{border-bottom:none}
+.c-dot{
+  width:14px;height:14px;border-radius:50%;border:3px solid var(--accent);
+  background:white;margin-top:3px;min-width:14px;z-index:1;
+}
+.c-dot.first{background:var(--accent)}
+.c-line{position:absolute;left:6px;top:24px;bottom:-18px;width:2px;background:var(--border)}
+.c-info{flex:1}
+.c-head{display:flex;justify-content:space-between;align-items:baseline;flex-wrap:wrap;gap:4px}
+.c-year{font-size:11px;font-weight:700;color:var(--accent);letter-spacing:1px}
+.c-salary{font-size:13px;font-weight:700;color:#059669;font-family:'DM Mono',monospace}
+.c-role{font-size:15px;font-weight:900;margin-top:3px}
+.c-skills{font-size:12px;color:var(--ink3);margin-top:3px}
+
+/* Targets */
+.target-card{
+  padding:16px;background:var(--card);border-radius:12px;
+  border:1px solid var(--border);margin-bottom:8px;box-shadow:var(--shadow);
+  transition:transform .15s;
+}
+.target-card:hover{transform:translateX(3px)}
+.t-head{display:flex;justify-content:space-between;align-items:center}
+.t-title{font-size:16px;font-weight:900;color:var(--ink)}
+.t-stars{font-size:14px;color:#F59E0B;letter-spacing:-1px}
+.t-note{font-size:13px;color:var(--ink2);margin-top:4px}
+
+.search-box{
+  background:var(--gold-bg);padding:18px;border-radius:var(--radius);
+  margin-top:20px;border:1px solid #FBBF24;
+}
+.search-box .s-label{font-size:14px;font-weight:900;color:var(--gold);margin-bottom:6px}
+.search-box .s-text{font-size:13px;color:#78350F;line-height:1.8}
+
+/* Reset */
+.reset{
+  display:block;margin:40px auto 0;padding:10px 24px;
+  background:transparent;border:1px solid var(--border);
+  border-radius:10px;cursor:pointer;font-size:12px;color:var(--ink3);
+  font-family:'Zen Kaku Gothic New',sans-serif;transition:all .15s;
+}
+.reset:hover{background:var(--card);border-color:var(--ink3)}
+
+/* Animations */
+@keyframes fadeUp{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+.detail{animation:fadeUp .3s ease}
+</style>
+</head>
+<body>
+<div class="app">
+
+  <!-- Hero -->
+  <div class="hero">
+    <div class="hero-eyebrow">1-Year Career Plan</div>
+    <h1><em>AML</em> × Data Analytics</h1>
+    <div class="hero-sub">分析スキルを武器に、なくならないキャリアを確実に築く</div>
+  </div>
+
+  <!-- Progress -->
+  <div class="progress-section">
+    <div class="ring-wrap">
+      <svg width="56" height="56" viewBox="0 0 56 56">
+        <circle class="ring-bg" cx="28" cy="28" r="23"/>
+        <circle class="ring-fill" id="ring" cx="28" cy="28" r="23"
+          stroke-dasharray="144.51" stroke-dashoffset="144.51"/>
+      </svg>
+      <div class="ring-text" id="ring-pct">0%</div>
+    </div>
+    <div class="progress-info">
+      <div class="progress-label">全体の進捗</div>
+      <div class="progress-detail" id="progress-detail">0 / 0 タスク完了</div>
+    </div>
+  </div>
+
+  <!-- Tabs -->
+  <div class="tabs">
+    <button class="tab active" data-tab="roadmap" onclick="switchTab('roadmap',this)">ロードマップ</button>
+    <button class="tab" data-tab="resources" onclick="switchTab('resources',this)">リソース</button>
+    <button class="tab" data-tab="career" onclick="switchTab('career',this)">キャリアパス</button>
+    <button class="tab" data-tab="targets" onclick="switchTab('targets',this)">狙うポジション</button>
+  </div>
+
+  <!-- Panels -->
+  <div class="panel active" id="p-roadmap">
+    <div class="phase-grid" id="pgrid"></div>
+    <div class="detail" id="detail"></div>
+  </div>
+
+  <div class="panel" id="p-resources">
+    <div class="filters" id="filters"></div>
+    <div id="res-list"></div>
+    <div class="tip-box">
+      <div class="tip-label">💡 学習のコツ</div>
+      <div class="tip-text">
+        SQLは毎日少しずつ触ることが大事です。1日30分でも、3ヶ月続ければ実務レベルになります。<br><br>
+        Pythonは最初から完璧を目指さず、「CSVを読み込んで集計する」という1つの目標から始めましょう。<br><br>
+        ACAMSのウェビナーは将来のCAMSクレジットにもなるので参加証明を保存しておくこと。
+      </div>
+    </div>
+  </div>
+
+  <div class="panel" id="p-career">
+    <p style="font-size:14px;color:var(--ink2);margin-bottom:20px">AML × Data Analyticsのキャリアパス（NZ市場ベース）</p>
+    <div class="career-wrap" id="career-list"></div>
+    <div class="info-box box-milestone" style="margin-top:20px">
+      <div class="ib-label">🔑 ポイント</div>
+      <div class="ib-text">
+        純粋なAML Analystの給料レンジより、Data Analyticsスキルがあると各段階で$10K-$20K高くなる傾向があります。<br>
+        さらにCAMSを取得すると市場価値がもう一段上がります。入行後に会社負担で取得するのがベストです。
+      </div>
+    </div>
+  </div>
+
+  <div class="panel" id="p-targets">
+    <p style="font-size:14px;color:var(--ink2);margin-bottom:16px">あなたのスキルセット（ビジネスMaster + AML知識 + SQL/Python）でマッチするポジション</p>
+    <div id="targets-list"></div>
+    <div class="search-box">
+      <div class="s-label">🔍 検索キーワード</div>
+      <div class="s-text">
+        Seek/LinkedInで以下のキーワードで検索しましょう：<br>
+        「AML Analyst Auckland」「Transaction Monitoring Auckland」<br>
+        「Compliance Analyst bank」「Financial Crime Analyst」<br>
+        「KYC Analyst Auckland」「Data Analyst banking」
+      </div>
+    </div>
+  </div>
+
+  <button class="reset" onclick="resetAll()">進捗をリセットする</button>
+</div>
+
+<script>
+const phases=[
+  {id:1,title:"基礎固め",subtitle:"AML知識 + SQL入門",months:"Month 1–3",
+   color:"var(--phase1)",bg:"var(--phase1-bg)",icon:"🌱",
+   goal:"AMLの基礎を固めながら、SQLの基本操作をマスターする",
+   tasks:[
+     {category:"📚 AML基礎知識",items:[
+       "AML必須用語を覚える（CDD, EDD, PEP, SAR, STR, UBO, SDD, Sanctions Screening）",
+       "NZ AML/CFT Act 2009の概要をFMAサイトで学ぶ",
+       "FATFの役割と40の勧告の概要を理解する",
+       "ACAMS無料ウェビナーに月2回参加する"
+     ]},
+     {category:"💻 SQL入門（最優先スキル）",items:[
+       "SQLBolt（sqlbolt.com）全レッスンを完了する ※無料・英語",
+       "SELECT, WHERE, JOIN, GROUP BY, ORDER BYを自在に使えるようにする",
+       "サブクエリとCASE文を理解する",
+       "練習：架空の取引データで「高額取引を抽出するクエリ」を書いてみる"
+     ]},
+     {category:"🔗 準備",items:[
+       "LinkedInプロフィールを英語で完成（AML + Data Analyticsに関心と明記）",
+       "NZ Herald金融ニュースを毎日読む習慣をつける",
+       "ANZ, ASB, BNZ, Westpac, KiwibankのLinkedInをフォロー"
+     ]}
+   ],
+   milestone:"SQLで基本的なデータ抽出ができ、AMLの基本概念を説明できる",
+   daily:"ニュース10分 → SQL練習30分 → AML学習20分",
+   weekend:"SQLBoltの復習 + ACAMSウェビナー視聴"},
+  {id:2,title:"スキル構築",subtitle:"SQL応用 + Python入門",months:"Month 4–6",
+   color:"var(--phase2)",bg:"var(--phase2-bg)",icon:"🔧",
+   goal:"SQLを実務レベルにし、Pythonでのデータ処理を始める",
+   tasks:[
+     {category:"💻 SQL応用",items:[
+       "Window関数（ROW_NUMBER, RANK, LAG, LEAD）を学ぶ",
+       "複数テーブルの結合（INNER, LEFT, RIGHT JOIN）を完璧にする",
+       "集計クエリ（売上分析、顧客セグメント分類）の練習",
+       "Mode Analytics SQL Tutorial（mode.com）で実践演習 ※無料"
+     ]},
+     {category:"🐍 Python入門",items:[
+       "Google Colab（colab.research.google.com）でPython環境を無料で使う",
+       "Pandas基礎：データの読み込み、フィルタリング、集計",
+       "CSVファイルを読み込んで分析する練習",
+       "freeCodeCampのPython講座（YouTube・無料）で基礎を固める"
+     ]},
+     {category:"📊 AML深掘り + 業界研究",items:[
+       "Transaction Monitoringの仕組みを詳しく学ぶ",
+       "NZ各銀行のAnnual Reportを読む（無料公開）",
+       "オーストラリアのAML事例（Westpac, CBA罰金事件）を研究",
+       "RegTech（規制テクノロジー）のトレンドを調べる"
+     ]}
+   ],
+   milestone:"SQLで複雑なクエリが書け、Pythonで基本的なデータ処理ができる",
+   daily:"ニュース10分 → SQL/Python練習35分 → AML学習15分",
+   weekend:"Pythonで小さなデータ分析プロジェクトに取り組む"},
+  {id:3,title:"実践 + 就活準備",subtitle:"ポートフォリオ作成 + 応募開始",months:"Month 7–9",
+   color:"var(--phase3)",bg:"var(--phase3-bg)",icon:"📋",
+   goal:"分析のポートフォリオを作り、就活を本格スタート",
+   tasks:[
+     {category:"📂 ポートフォリオ作成（差別化の武器）",items:[
+       "GitHubアカウントを作成する",
+       "プロジェクト①：公開データで不審取引パターンを分析（Python + pandas）",
+       "プロジェクト②：SQLでの顧客リスクスコアリングのクエリ集",
+       "Tableau Public（無料）でダッシュボードを1つ作成する"
+     ]},
+     {category:"📄 CV・応募準備",items:[
+       "CV作成：AML知識 + データスキル（SQL, Python, Tableau）を強調",
+       "「AML Data Analyst」「Compliance Analyst」「Transaction Monitoring」で求人検索",
+       "銀行ごとにカバーレターをカスタマイズ",
+       "Seek, LinkedIn Jobs, 各銀行Careersページを毎日チェック"
+     ]},
+     {category:"🎤 面接対策",items:[
+       "「SQLで不審な取引をどう抽出するか」を説明できるようにする",
+       "STAR法で経験を整理（データ分析で課題を解決した例）",
+       "「AMLにおけるデータ分析の役割とは？」への回答を準備",
+       "Hays, Robert Half, Robert Waltersに登録"
+     ]}
+   ],
+   milestone:"ポートフォリオが完成し、週3-5件ペースで応募している",
+   daily:"求人チェック15分 → ポートフォリオ/応募25分 → 面接練習20分",
+   weekend:"ポートフォリオのプロジェクトを仕上げる"},
+  {id:4,title:"入行＆成長",subtitle:"実務経験 + 次のレベルへ",months:"Month 10–12",
+   color:"var(--phase4)",bg:"var(--phase4-bg)",icon:"🚀",
+   goal:"銀行に入行し、AML Data Analyticsのキャリアを築き始める",
+   tasks:[
+     {category:"💼 入行後のアクション",items:[
+       "最初の3ヶ月は与えられた仕事を完璧にこなす",
+       "社内データベースやBIツールに慣れる",
+       "AML/Complianceチームと積極的に交流する",
+       "社内のデータ関連トレーニングに全て参加する"
+     ]},
+     {category:"📈 ステップアップ",items:[
+       "Power BI or Tableauのスキルを実務で磨く",
+       "社内のTransaction Monitoringデータを分析する機会を探す",
+       "CAMS取得を会社負担で上司に相談する",
+       "AML × Analytics関連の社内プロジェクトに手を挙げる"
+     ]},
+     {category:"🎯 まだ就活中の場合",items:[
+       "応募数を週5-10件に増やす",
+       "契約（Contract）ポジションも検討する",
+       "FinTech企業やRegTech企業にも範囲を広げる",
+       "小規模な金融機関（Credit Union等）も視野に入れる"
+     ]}
+   ],
+   milestone:"銀行またはFinTechに入行し、データ分析の実務経験を積み始める",
+   daily:"業務に集中 → 帰宅後30分でスキルアップ学習",
+   weekend:"新しい分析ツールや手法を試す"}
+];
+
+const resources=[
+  {name:"SQLBolt",url:"sqlbolt.com",desc:"SQL入門に最適。インタラクティブで実践的",cat:"SQL"},
+  {name:"Mode SQL Tutorial",url:"mode.com/sql-tutorial",desc:"中級〜実務レベルのSQL演習",cat:"SQL"},
+  {name:"Google Colab",url:"colab.research.google.com",desc:"無料のPython実行環境。インストール不要",cat:"Python"},
+  {name:"freeCodeCamp Python",url:"youtube.com/freecodecamp",desc:"Python基礎の動画講座（4時間）",cat:"Python"},
+  {name:"Kaggle Learn",url:"kaggle.com/learn",desc:"Pandas, データ可視化の無料コース",cat:"Python"},
+  {name:"Tableau Public",url:"public.tableau.com",desc:"無料のデータ可視化ツール + ポートフォリオ公開",cat:"可視化"},
+  {name:"ACAMS無料ウェビナー",url:"acams.org",desc:"AML学習 + CAMSクレジット獲得",cat:"AML"},
+  {name:"FMA AML/CFTガイド",url:"fma.govt.nz",desc:"NZのAML規制の公式ガイドライン",cat:"AML"},
+  {name:"FATF Publications",url:"fatf-gafi.org",desc:"国際的なAML基準と報告書",cat:"AML"}
+];
+
+const careerPath=[
+  {year:"入行時",role:"AML Analyst / Compliance Analyst",salary:"$55K–$70K",skills:"SQL, AML基礎, Excel"},
+  {year:"2–3年後",role:"AML Data Analyst / Senior Analyst",salary:"$75K–$95K",skills:"+ Python, Tableau/Power BI"},
+  {year:"4–5年後",role:"TM Analytics Lead / FC Analytics Manager",salary:"$100K–$130K",skills:"+ CAMS, チームマネジメント"},
+  {year:"7年後〜",role:"Head of Financial Crime Analytics",salary:"$130K–$170K+",skills:"+ 戦略立案, ステークホルダー管理"}
+];
+
+const targetRoles=[
+  {title:"AML Analyst",match:"★★★★★",note:"最も入りやすい。AML知識 + SQLで差別化"},
+  {title:"Transaction Monitoring Analyst",match:"★★★★★",note:"データ分析スキルが直接活きる"},
+  {title:"Compliance Analyst",match:"★★★★☆",note:"幅広い規制対応。AMLに特化はしない"},
+  {title:"Data Analyst（銀行）",match:"★★★★☆",note:"AML以外のデータ分析も含む"},
+  {title:"Risk Analyst",match:"★★★☆☆",note:"信用リスク等も含む。数学スキル要"}
+];
+
+// State
+let done=JSON.parse(localStorage.getItem('aml-v2')||'{}');
+let curPhase=1;
+let curFilter='all';
+
+const save=()=>localStorage.setItem('aml-v2',JSON.stringify(done));
+const CIRCUM=2*Math.PI*23; // ~144.51
+
+function toggle(pid,ci,ii){
+  const k=`${pid}-${ci}-${ii}`;
+  done[k]=!done[k];
+  save();renderDetail();renderGrid();updateProgress();
+}
+
+function phaseProgress(pid){
+  const p=phases.find(x=>x.id===pid);
+  let t=0,d=0;
+  p.tasks.forEach((c,ci)=>c.items.forEach((_,ii)=>{t++;if(done[`${pid}-${ci}-${ii}`])d++}));
+  return{done:d,total:t,pct:t?Math.round(d/t*100):0};
+}
+
+function totalProgress(){
+  let t=0,d=0;
+  phases.forEach(p=>p.tasks.forEach((c,ci)=>c.items.forEach((_,ii)=>{t++;if(done[`${p.id}-${ci}-${ii}`])d++})));
+  return{done:d,total:t,pct:t?Math.round(d/t*100):0};
+}
+
+function updateProgress(){
+  const{done:d,total:t,pct}=totalProgress();
+  document.getElementById('ring-pct').textContent=pct+'%';
+  document.getElementById('ring').style.strokeDashoffset=CIRCUM-(CIRCUM*pct/100);
+  document.getElementById('progress-detail').textContent=`${d} / ${t} タスク完了`;
+}
+
+function renderGrid(){
+  const g=document.getElementById('pgrid');
+  g.innerHTML=phases.map(p=>{
+    const{pct}=phaseProgress(p.id);
+    return`<div class="phase-card ${curPhase===p.id?'sel':''}" style="background:${p.bg}" onclick="selectPhase(${p.id})">
+      <div class="pc-icon">${p.icon}</div>
+      <div class="pc-months" style="color:${p.color}">${p.months}</div>
+      <div class="pc-title" style="color:${p.color}">${p.title}</div>
+      <div class="pc-sub" style="color:${p.color}">${p.subtitle}</div>
+      <div class="pc-bar"><div class="pc-fill" style="width:${pct}%;background:${p.color}"></div></div>
+      <div class="pc-pct" style="color:${p.color}">${pct}%</div>
+    </div>`;
+  }).join('');
+}
+
+function renderDetail(){
+  const p=phases.find(x=>x.id===curPhase);
+  const el=document.getElementById('detail');
+  let html=`<div class="detail-head">
+    <div class="detail-icon">${p.icon}</div>
+    <div class="detail-meta">
+      <div class="dm-months" style="color:${p.color}">${p.months}</div>
+      <h2 style="color:${p.color}">${p.title}<span>${p.subtitle}</span></h2>
+    </div>
+  </div>
+  <div class="goal">🎯 ${p.goal}</div>`;
+
+  p.tasks.forEach((cat,ci)=>{
+    html+=`<div class="cat-label">${cat.category}</div>`;
+    cat.items.forEach((item,ii)=>{
+      const k=`${p.id}-${ci}-${ii}`;
+      const on=!!done[k];
+      html+=`<div class="task" onclick="toggle(${p.id},${ci},${ii})">
+        <div class="cb ${on?'on':''}">${on?'✓':''}</div>
+        <span class="task-txt ${on?'done':''}">${item}</span>
+      </div>`;
+    });
+  });
+
+  html+=`<div class="info-box box-routine"><div class="ib-label">⏰ 毎日のルーティン（1時間）</div><div class="ib-text">${p.daily}</div></div>`;
+  html+=`<div class="info-box box-weekend"><div class="ib-label">🎁 週末ボーナス</div><div class="ib-text">${p.weekend}</div></div>`;
+  html+=`<div class="info-box box-milestone"><div class="ib-label">🏁 このフェーズのゴール</div><div class="ib-text">${p.milestone}</div></div>`;
+
+  el.innerHTML=html;
+}
+
+function selectPhase(id){curPhase=id;renderGrid();renderDetail();}
+
+function renderFilters(){
+  const cats=['all','SQL','Python','可視化','AML'];
+  document.getElementById('filters').innerHTML=cats.map(c=>
+    `<button class="fbtn ${c==='all'?'on':''}" data-f="${c}" onclick="filterRes('${c}',this)">${c==='all'?'全て':c}</button>`
+  ).join('');
+}
+
+function filterRes(cat,btn){
+  curFilter=cat;
+  document.querySelectorAll('.fbtn').forEach(b=>b.classList.toggle('on',b.dataset.f===cat));
+  renderResources();
+}
+
+function renderResources(){
+  const list=curFilter==='all'?resources:resources.filter(r=>r.cat===curFilter);
+  document.getElementById('res-list').innerHTML=list.map(r=>
+    `<div class="res-card">
+      <div class="res-head"><div class="res-name">${r.name}</div><span class="res-tag">${r.cat}</span></div>
+      <div class="res-url">${r.url}</div>
+      <div class="res-desc">${r.desc}</div>
+    </div>`
+  ).join('');
+}
+
+function renderCareer(){
+  document.getElementById('career-list').innerHTML=careerPath.map((s,i)=>
+    `<div class="career-step">
+      ${i<careerPath.length-1?'<div class="c-line"></div>':''}
+      <div class="c-dot ${i===0?'first':''}"></div>
+      <div class="c-info">
+        <div class="c-head"><span class="c-year">${s.year}</span><span class="c-salary">${s.salary}</span></div>
+        <div class="c-role">${s.role}</div>
+        <div class="c-skills">必要スキル: ${s.skills}</div>
+      </div>
+    </div>`
+  ).join('');
+}
+
+function renderTargets(){
+  document.getElementById('targets-list').innerHTML=targetRoles.map(r=>
+    `<div class="target-card">
+      <div class="t-head"><div class="t-title">${r.title}</div><div class="t-stars">${r.match}</div></div>
+      <div class="t-note">${r.note}</div>
+    </div>`
+  ).join('');
+}
+
+function switchTab(id,btn){
+  document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+  document.getElementById('p-'+id).classList.add('active');
+  btn.classList.add('active');
+}
+
+function resetAll(){
+  if(confirm('進捗を全てリセットしますか？')){
+    done={};save();renderGrid();renderDetail();updateProgress();
+  }
+}
+
+// Init
+renderGrid();renderDetail();renderFilters();renderResources();renderCareer();renderTargets();updateProgress();
+</script>
+</body>
+</html>
