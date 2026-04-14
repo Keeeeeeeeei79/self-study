@@ -1,0 +1,479 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Python学習ロードマップ</title>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Zen+Kaku+Gothic+New:wght@400;700;900&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #0a0e17;
+  --surface: #121927;
+  --surface2: #1a2236;
+  --border: #243049;
+  --accent: #6ee7b7;
+  --accent2: #38bdf8;
+  --accent3: #f472b6;
+  --accent4: #c084fc;
+  --accent5: #fbbf24;
+  --text: #e2e8f0;
+  --text-muted: #7a8ba8;
+  --glow: rgba(110, 231, 183, 0.08);
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'Zen Kaku Gothic New', sans-serif;
+  min-height: 100vh;
+  padding: 0 0 80px;
+}
+
+header {
+  padding: 48px 32px 24px;
+  max-width: 780px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.subtitle {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  color: var(--accent);
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  margin-bottom: 12px;
+}
+
+h1 {
+  font-size: 28px;
+  font-weight: 900;
+  background: linear-gradient(135deg, var(--accent), var(--accent2));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  margin-bottom: 12px;
+}
+
+.intro {
+  color: var(--text-muted);
+  font-size: 14px;
+  line-height: 1.8;
+  max-width: 560px;
+  margin: 0 auto;
+}
+
+.target-badge {
+  display: inline-block;
+  margin-top: 16px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  padding: 5px 14px;
+  border: 1px solid var(--accent5);
+  color: var(--accent5);
+  border-radius: 20px;
+}
+
+/* Timeline */
+.timeline {
+  max-width: 780px;
+  margin: 40px auto 0;
+  padding: 0 32px;
+  position: relative;
+}
+
+.timeline::before {
+  content: '';
+  position: absolute;
+  left: 56px;
+  top: 0;
+  bottom: 0;
+  width: 2px;
+  background: linear-gradient(to bottom, var(--accent), var(--accent2), var(--accent4), var(--accent3));
+  opacity: 0.3;
+}
+
+.phase {
+  position: relative;
+  margin-bottom: 40px;
+  padding-left: 80px;
+  animation: fadeInUp 0.5s ease both;
+}
+
+.phase:nth-child(1) { animation-delay: 0.1s; }
+.phase:nth-child(2) { animation-delay: 0.2s; }
+.phase:nth-child(3) { animation-delay: 0.3s; }
+.phase:nth-child(4) { animation-delay: 0.4s; }
+.phase:nth-child(5) { animation-delay: 0.5s; }
+
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.phase-dot {
+  position: absolute;
+  left: 47px;
+  top: 20px;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  border: 3px solid;
+  background: var(--bg);
+  z-index: 2;
+}
+
+.phase:nth-child(1) .phase-dot { border-color: var(--accent); box-shadow: 0 0 12px rgba(110,231,183,0.4); }
+.phase:nth-child(2) .phase-dot { border-color: var(--accent2); box-shadow: 0 0 12px rgba(56,189,248,0.4); }
+.phase:nth-child(3) .phase-dot { border-color: var(--accent4); box-shadow: 0 0 12px rgba(192,132,252,0.4); }
+.phase:nth-child(4) .phase-dot { border-color: var(--accent3); box-shadow: 0 0 12px rgba(244,114,182,0.4); }
+.phase:nth-child(5) .phase-dot { border-color: var(--accent5); box-shadow: 0 0 12px rgba(251,191,36,0.4); }
+
+.phase-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 24px;
+  transition: border-color 0.3s, transform 0.2s;
+}
+
+.phase-card:hover {
+  transform: translateX(4px);
+}
+
+.phase:nth-child(1) .phase-card:hover { border-color: var(--accent); }
+.phase:nth-child(2) .phase-card:hover { border-color: var(--accent2); }
+.phase:nth-child(3) .phase-card:hover { border-color: var(--accent4); }
+.phase:nth-child(4) .phase-card:hover { border-color: var(--accent3); }
+.phase:nth-child(5) .phase-card:hover { border-color: var(--accent5); }
+
+.phase-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 14px;
+}
+
+.phase-week {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  font-weight: 700;
+  padding: 3px 10px;
+  border-radius: 4px;
+  flex-shrink: 0;
+}
+
+.phase:nth-child(1) .phase-week { background: rgba(110,231,183,0.15); color: var(--accent); }
+.phase:nth-child(2) .phase-week { background: rgba(56,189,248,0.15); color: var(--accent2); }
+.phase:nth-child(3) .phase-week { background: rgba(192,132,252,0.15); color: var(--accent4); }
+.phase:nth-child(4) .phase-week { background: rgba(244,114,182,0.15); color: var(--accent3); }
+.phase:nth-child(5) .phase-week { background: rgba(251,191,36,0.15); color: var(--accent5); }
+
+.phase-title {
+  font-size: 17px;
+  font-weight: 900;
+}
+
+.phase-desc {
+  color: var(--text-muted);
+  font-size: 13px;
+  line-height: 1.7;
+  margin-bottom: 16px;
+}
+
+.skill-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+
+.skill-chip {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  padding: 4px 12px;
+  border-radius: 6px;
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  color: var(--text);
+}
+
+.goal-box {
+  background: var(--surface2);
+  border-radius: 8px;
+  padding: 12px 16px;
+  font-size: 13px;
+  line-height: 1.7;
+  border-left: 3px solid;
+}
+
+.phase:nth-child(1) .goal-box { border-left-color: var(--accent); }
+.phase:nth-child(2) .goal-box { border-left-color: var(--accent2); }
+.phase:nth-child(3) .goal-box { border-left-color: var(--accent4); }
+.phase:nth-child(4) .goal-box { border-left-color: var(--accent3); }
+.phase:nth-child(5) .goal-box { border-left-color: var(--accent5); }
+
+.goal-label {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  color: var(--text-muted);
+  letter-spacing: 0.1em;
+  margin-bottom: 4px;
+}
+
+.goal-text {
+  color: var(--text);
+}
+
+/* SQL parallel note */
+.parallel-note {
+  max-width: 780px;
+  margin: 0 auto;
+  padding: 0 32px 0 112px;
+}
+
+.parallel-card {
+  background: rgba(110,231,183,0.05);
+  border: 1px dashed var(--accent);
+  border-radius: 10px;
+  padding: 18px 22px;
+  font-size: 13px;
+  color: var(--text-muted);
+  line-height: 1.7;
+}
+
+.parallel-card strong {
+  color: var(--accent);
+}
+
+/* Tips */
+.tips-section {
+  max-width: 780px;
+  margin: 40px auto 0;
+  padding: 0 32px;
+}
+
+.tips-title {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  color: var(--text-muted);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  margin-bottom: 16px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--border);
+}
+
+.tips-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 14px;
+}
+
+.tip-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 18px;
+}
+
+.tip-icon {
+  font-size: 20px;
+  margin-bottom: 8px;
+}
+
+.tip-title {
+  font-size: 14px;
+  font-weight: 700;
+  margin-bottom: 6px;
+}
+
+.tip-text {
+  font-size: 12px;
+  color: var(--text-muted);
+  line-height: 1.6;
+}
+
+@media (max-width: 600px) {
+  header { padding: 32px 20px 20px; }
+  h1 { font-size: 22px; }
+  .timeline { padding: 0 16px; }
+  .timeline::before { left: 32px; }
+  .phase { padding-left: 56px; }
+  .phase-dot { left: 23px; }
+  .parallel-note { padding: 0 16px 0 56px; }
+  .tips-section { padding: 0 16px; }
+}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="subtitle">// Learning Roadmap</div>
+  <h1>Python学習ロードマップ</h1>
+  <p class="intro">
+    銀行のデータ分析・リスク管理職を目指すための学習プラン。<br>
+    SQLと並行しながら、約3ヶ月で実務レベルの基礎を身につけます。
+  </p>
+  <div class="target-badge">🎯 目標: 銀行データ分析・リスク管理職</div>
+</header>
+
+<div class="timeline">
+
+  <!-- Phase 1 -->
+  <div class="phase">
+    <div class="phase-dot"></div>
+    <div class="phase-card">
+      <div class="phase-header">
+        <span class="phase-week">Week 1-2</span>
+        <div class="phase-title">Python基礎文法</div>
+      </div>
+      <div class="phase-desc">
+        まずはPythonの書き方に慣れる。完璧に覚えようとせず、「こういうことができる」を知るだけでOK。
+      </div>
+      <div class="skill-list">
+        <span class="skill-chip">変数・型</span>
+        <span class="skill-chip">if / for / while</span>
+        <span class="skill-chip">関数 def</span>
+        <span class="skill-chip">リスト・辞書</span>
+        <span class="skill-chip">ファイル読み書き</span>
+      </div>
+      <div class="goal-box">
+        <div class="goal-label">// ゴール</div>
+        <div class="goal-text">簡単な計算やデータ処理のスクリプトが自力で書ける</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Phase 2 -->
+  <div class="phase">
+    <div class="phase-dot"></div>
+    <div class="phase-card">
+      <div class="phase-header">
+        <span class="phase-week">Week 3-5</span>
+        <div class="phase-title">pandas でデータ加工</div>
+      </div>
+      <div class="phase-desc">
+        ここが一番大事なフェーズ。CSVやExcelを読み込んで、フィルタ・集計・結合ができるようになる。SQLでやったことがPythonでもできる感覚がつかめます。
+      </div>
+      <div class="skill-list">
+        <span class="skill-chip">pd.read_csv</span>
+        <span class="skill-chip">フィルタリング</span>
+        <span class="skill-chip">groupby / agg</span>
+        <span class="skill-chip">merge（≒ JOIN）</span>
+        <span class="skill-chip">欠損値処理</span>
+        <span class="skill-chip">pivot_table</span>
+      </div>
+      <div class="goal-box">
+        <div class="goal-label">// ゴール</div>
+        <div class="goal-text">生データのCSVを渡されて「月別売上を集計して」と言われたら対応できる</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Phase 3 -->
+  <div class="phase">
+    <div class="phase-dot"></div>
+    <div class="phase-card">
+      <div class="phase-header">
+        <span class="phase-week">Week 6-7</span>
+        <div class="phase-title">データ可視化</div>
+      </div>
+      <div class="phase-desc">
+        数字をグラフにして「見せる力」を身につける。銀行のレポートやプレゼンで必ず求められるスキル。
+      </div>
+      <div class="skill-list">
+        <span class="skill-chip">matplotlib</span>
+        <span class="skill-chip">seaborn</span>
+        <span class="skill-chip">棒グラフ・折れ線</span>
+        <span class="skill-chip">ヒートマップ</span>
+        <span class="skill-chip">散布図</span>
+      </div>
+      <div class="goal-box">
+        <div class="goal-label">// ゴール</div>
+        <div class="goal-text">データから意味のあるグラフを選んで作成し、傾向を説明できる</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Phase 4 -->
+  <div class="phase">
+    <div class="phase-dot"></div>
+    <div class="phase-card">
+      <div class="phase-header">
+        <span class="phase-week">Week 8-10</span>
+        <div class="phase-title">統計基礎 + 実践プロジェクト</div>
+      </div>
+      <div class="phase-desc">
+        リスク管理に直結する統計の基礎と、実際のデータセットを使ったミニプロジェクトに挑戦。ポートフォリオにもなります。
+      </div>
+      <div class="skill-list">
+        <span class="skill-chip">平均・中央値・分散</span>
+        <span class="skill-chip">相関分析</span>
+        <span class="skill-chip">正規分布</span>
+        <span class="skill-chip">numpy</span>
+        <span class="skill-chip">ミニプロジェクト</span>
+      </div>
+      <div class="goal-box">
+        <div class="goal-label">// ゴール</div>
+        <div class="goal-text">「顧客データを分析してリスク傾向をレポートして」に対応できる</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Phase 5 -->
+  <div class="phase">
+    <div class="phase-dot"></div>
+    <div class="phase-card">
+      <div class="phase-header">
+        <span class="phase-week">Week 11-12</span>
+        <div class="phase-title">就活準備 + 応用</div>
+      </div>
+      <div class="phase-desc">
+        学んだことを整理して、ポートフォリオや面接の準備。余裕があればPower BIやJupyter Notebookでの報告書作成も。
+      </div>
+      <div class="skill-list">
+        <span class="skill-chip">Jupyter Notebook</span>
+        <span class="skill-chip">ポートフォリオ整理</span>
+        <span class="skill-chip">Power BI 入門</span>
+        <span class="skill-chip">面接対策</span>
+      </div>
+      <div class="goal-box">
+        <div class="goal-label">// ゴール</div>
+        <div class="goal-text">「Pythonでこういう分析ができます」と具体例つきで説明できる</div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<div class="parallel-note">
+  <div class="parallel-card">
+    <strong>📌 SQLは並行して進める：</strong>今の課題集を1日1問ペースで消化 → 終わったらGROUP BY・COUNT・SUMの練習を少しだけ追加。合計2〜3週間で完了でOK。
+  </div>
+</div>
+
+<div class="tips-section">
+  <div class="tips-title">// 学習のコツ</div>
+  <div class="tips-grid">
+    <div class="tip-card">
+      <div class="tip-icon">⏱</div>
+      <div class="tip-title">1日30分でいい</div>
+      <div class="tip-text">毎日少しずつが最強。週末にまとめてより、平日の隙間時間の方が定着する。</div>
+    </div>
+    <div class="tip-card">
+      <div class="tip-icon">🛠</div>
+      <div class="tip-title">手を動かす</div>
+      <div class="tip-text">動画や本を読むだけでなく、必ず自分でコードを書く。写経でもOK。</div>
+    </div>
+    <div class="tip-card">
+      <div class="tip-icon">🤖</div>
+      <div class="tip-title">AIを活用する</div>
+      <div class="tip-text">わからないことはClaudeに聞く。エラーを貼って「これ何？」でOK。</div>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>
